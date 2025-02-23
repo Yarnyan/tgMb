@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import Calls from '@/modules/calls/Calls';
 const CallsPage = () => {
     return (

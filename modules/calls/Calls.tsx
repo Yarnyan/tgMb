@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, ScrollView, Image, TouchableOpacity, Modal, Pressable } from 'react-native';
+import React from 'react';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import Call from './components/Call';
 import { ICall, MediaType } from './types/types';
 import { useNavigation } from 'expo-router';

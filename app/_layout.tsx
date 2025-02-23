@@ -11,7 +11,6 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { Provider } from 'react-redux';
 import { setupStore } from '@/store/store';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -40,8 +39,10 @@ export default function RootLayout() {
           <Stack.Screen name="contacts" options={{ headerShown: false }} />
           <Stack.Screen name="storiesCreate" options={{ headerShown: false }} />
           <Stack.Screen name="storiesHistory" options={{ headerShown: false }} />
-          <Stack.Screen name="chats" options={{ headerShown: false }} />
+          <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="stories" options={{ headerShown: false }} />
+          <Stack.Screen name="reg" options={{ headerShown: false }} />
+          <Stack.Screen name="login" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style="auto" />

@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity, Switch, ScrollView, TouchableWitho
 import { Link } from 'expo-router';
 import Svg, { Path } from 'react-native-svg';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { toggleHeader } from '@/store/reducers/headerSlice';
+import { logOut, toggleHeader} from '@/store/reducers/headerSlice';
 import { useAppDispatch } from '@/hooks/redux';
 
 const SideBar = () => {
@@ -14,7 +14,7 @@ const SideBar = () => {
     return (
         <View className='absolute z-50 w-full h-full'> 
             <View className='w-full h-full flex flex flex-row'>
-                <View ref={sidebarRef} className={`w-[380px] sm:h-[100dvh] fixed z-50 top-0 left-0 h-full transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} w-64 bg-dark-activeTab shadow-lg z-20 px-[20px] py-[16px]`}>
+                <View ref={sidebarRef} className={`w-[380px] sm:h-[100dvh] fixed z-50 top-0 left-0 h-full transform transition-transform duration-300 w-64 bg-dark-activeTab shadow-lg z-20 px-[20px] py-[16px]`}>
                     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                         <View className='h-[102px] flex items-center bg-[var(--chatsBarButtonColor)] rounded-[20px] p-[16px]'>
                             <Image source={require('../../assets/image/1.jpg')} className='w-[120px] h-[120px] rounded-full' />
@@ -39,7 +39,7 @@ const SideBar = () => {
                                 </View>
                             </Link>
                             <View className='h-[48px] flex'>
-                                <Link href={'/chats'} onPress={() => dispatch(toggleHeader())}>
+                                <Link href={'/'} onPress={() => dispatch(toggleHeader())}>
                                     <View className='flex flex-row'>
                                         <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                             <Path d="M12.8334 5.88H5.05334C3.34334 5.88 1.94336 7.27999 1.94336 8.98999V20.35C1.94336 21.8 2.98336 22.42 4.25336 21.71L8.18335 19.52C8.60335 19.29 9.28336 19.29 9.69336 19.52L13.6234 21.71C14.8934 22.42 15.9333 21.8 15.9333 20.35V8.98999C15.9433 7.27999 14.5434 5.88 12.8334 5.88Z" stroke="#AEAEAE" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -106,9 +106,9 @@ const SideBar = () => {
                             </View>
                         </View>
                         <View className="mt-[16px]">
-                            <TouchableOpacity className='flex flex-row items-center justify-center rounded-[20px] bg-dark-createModalHoverColorButton w-full h-[48px]' onPress={() => dispatch(toggleHeader())}>
+                            <TouchableOpacity className='flex flex-row items-center justify-center rounded-[20px] bg-dark-createModalHoverColorButton w-full h-[48px]' onPress={() => dispatch(logOut())}>
                                 <FontAwesome6 name="add" size={24} color="#AEAEAE" />
-                                <Text className='text-[16px] font-medium text-dark-callsBarCallNameColor ml-[8px]'>Add accounts</Text>
+                                <Text className='text-[16px] font-medium text-dark-callsBarCallNameColor ml-[8px]'>Log out</Text>
                             </TouchableOpacity>
                         </View>
                     </ScrollView>

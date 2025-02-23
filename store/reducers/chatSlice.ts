@@ -6,21 +6,27 @@ interface ActiveChat {
   lastMessage: string;
   lastMessageTime: string;
   unreadMessages: number;
-  src: string;
+  avatar: string;
 }
 
 interface ChatState {
-  activeChat: ActiveChat | null;
+  activeChat: any;
   activeTabChat: string;
   activeMoreTab: boolean;
   moreTab: number,
+  allChats: any,
+  editSteps: number,
+  searchUserForPhone: any,
 }
 
 const initialState: ChatState = {
   activeChat: null,
   activeTabChat: 'users',
   activeMoreTab: false,
-  moreTab: 0,
+  moreTab: -1,
+  allChats: [],
+  editSteps: 0,
+  searchUserForPhone: null
 };
 
 const chatSlice = createSlice({
@@ -36,14 +42,33 @@ const chatSlice = createSlice({
     toggleMoreTab: (state) => {
       state.activeMoreTab = !state.activeMoreTab;
     },
+    hideMoreTab: (state) => {
+      state.activeMoreTab = false;
+    },
     setMoreTab: (state, action: PayloadAction<number>) => {
       state.moreTab = action.payload;
     },
     setInitialMoreTab: (state) => {
       state.moreTab = 0
-    }
+    },
+    clearActiveChat: (state) => {
+      state.activeChat = null;
+      localStorage.removeItem('activeChat');
+    },
+    setAllChats: (state, action: PayloadAction<any[]>) => {
+      state.allChats = action.payload;
+    },
+    nextEditStep: (state) => {
+      state.editSteps += 1;
+    },
+    prevEditStep: (state) => {
+      state.editSteps -= 1;
+    },
+    setSearchUserForPhone: (state, action: PayloadAction<any>) => {
+      state.searchUserForPhone = action.payload;
+    },
   },
 });
 
-export const { setActiveChat, selectTab, toggleMoreTab, setMoreTab, setInitialMoreTab } = chatSlice.actions;
+export const { setActiveChat, selectTab, toggleMoreTab, setMoreTab, setInitialMoreTab, clearActiveChat, setAllChats, hideMoreTab, nextEditStep, prevEditStep, setSearchUserForPhone } = chatSlice.actions;
 export default chatSlice.reducer;
