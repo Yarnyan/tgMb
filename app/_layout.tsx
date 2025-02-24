@@ -8,13 +8,13 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 
-import { Provider } from 'react-redux';
-import { setupStore } from '@/store/store';
+import StoreProvider from '@/helpers/StoreProvider';
+
+// import { useInitializeApp } from '@/hooks/useInitializeApp';
 
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const store = setupStore();
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
@@ -31,7 +31,7 @@ export default function RootLayout() {
   }
 
   return (
-    <Provider store={store}>
+    <StoreProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="profile" options={{ headerShown: false }} />
@@ -43,10 +43,11 @@ export default function RootLayout() {
           <Stack.Screen name="stories" options={{ headerShown: false }} />
           <Stack.Screen name="reg" options={{ headerShown: false }} />
           <Stack.Screen name="login" options={{ headerShown: false }} />
+          <Stack.Screen name="chat" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>
-    </Provider>
+    </StoreProvider>
   );
 }

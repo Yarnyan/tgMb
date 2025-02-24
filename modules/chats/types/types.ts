@@ -4,5 +4,5 @@ export interface IChat {
     lastMessage: string,
     lastMessageTime: string,
     unreadMessages: number
-    src: string
+    avatar: string
 }
