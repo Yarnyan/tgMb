@@ -30,9 +30,15 @@ const profileSlice = createSlice({
     },
     setProfileInfo: (state, action) => {
       state.profile = action.payload;
+    },
+    setUsernameForProfile: (state, action) => {
+      state.profile.username = action.payload;
+    },
+    setAvatarForProfile: (state, action) => {
+      state.profile.avatar = action.payload;
     }
   },
 });
 
-export const { nextStep, prevStep, setProfileVisible, setPhoneVisible, setProfileInfo} = profileSlice.actions;
+export const { nextStep, prevStep, setProfileVisible, setPhoneVisible, setProfileInfo, setUsernameForProfile, setAvatarForProfile} = profileSlice.actions;
 export default profileSlice.reducer;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from 'expo-router';
+import { Link, useNavigation } from 'expo-router';
 import { IAccount } from './types/types';
 import Account from './components/account';
 import Feather from '@expo/vector-icons/Feather';
@@ -9,6 +9,7 @@ import PlusIcon from './components/plusIcon';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo';
 import Svg, { Path } from 'react-native-svg';
+import { useAppSelector } from '@/hooks/redux';
 
 const Profile = () => {
     const navigation = useNavigation();
@@ -24,6 +25,8 @@ const Profile = () => {
             src: require('../../assets/image/2.jpg')
         },
     ]
+    const profile = useAppSelector((state) => state.profile.profile);
+    console.log(profile)
     return (
         <View className='h-full w-full'>
             <View className='bg-dark-activeTab w-full h-[100px] px-[16px] flex flex-col justify-between pb-[12px]'>
@@ -44,11 +47,11 @@ const Profile = () => {
                 <View className='w-full h-full bg-dark-asideColor'>
                     <View className='flex flex-row items-center mt-[28px]'>
                         <View>
-                            <Image source={require('../../assets/image/1.jpg')} className='w-[70px] h-[70px] rounded-full'></Image>
+                            <Image source={profile.avatar ? {url: profile.avatar} : require('../../assets/image/user.png')} className='w-[70px] h-[70px] rounded-full'></Image>
                         </View>
                         <View className='ml-[14px]'>
-                            <Text className='text-[20px] font-medium text-dark-storiesBarMenuTextColor'>Anna Forton</Text>
-                            <Text className='text-[16px] font-medium text-dark-asideTextColor'>@annasya</Text>
+                            <Text className='text-[20px] font-medium text-dark-storiesBarMenuTextColor'>{profile.username}</Text>
+                            <Text className='text-[16px] font-medium text-dark-asideTextColor'>@{profile.username}</Text>
                         </View>
                     </View>
                     <View className='bg-dark-activeTab mt-[20px] rounded-[20px] px-[16px]'>
@@ -75,9 +78,9 @@ const Profile = () => {
                                 <Path d="M11.9434 12.5C13.0479 12.5 13.9434 11.6046 13.9434 10.5C13.9434 9.39543 13.0479 8.5 11.9434 8.5C10.8388 8.5 9.94336 9.39543 9.94336 10.5C9.94336 11.6046 10.8388 12.5 11.9434 12.5Z" stroke="#AEAEAE" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
                                 <Path d="M11.9434 12.5V15.5" stroke="#AEAEAE" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
                             </Svg>
-                            <View className='w-max'>
-                                <Text className='text-[16px] font-medium text-dark-callsBarCallNameColor ml-[14px]'>Privacy</Text>
-                            </View>
+                            <Link href='/settings' className='w-max ml-3.5'>
+                                <Text className='text-[16px] font-medium text-dark-callsBarCallNameColor ml-[14px]'>Settings & Privacy</Text>
+                            </Link>
                         </View>
                         <View className='flex flex-row items-center border-b-[2px] border-dark-asideColor h-[48px]'>
                             <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">

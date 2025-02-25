@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { useAppDispatch } from '../../hooks/redux';
@@ -7,6 +7,7 @@ import { useGetChatsQuery } from '../../store/api/Chat';
 import { useGetUserByPhoneQuery, useGetUserByUsernameQuery } from '../../store/api/User';
 import Loader from '../../components/ui/Loader';
 import Chat from './components/chat';
+import { useFocusEffect } from 'expo-router';
 
 const ChatsBar = () => {
     const [activeTab, setActiveTab] = useState<'All' | 'Channels' | 'Groups'>('All');
@@ -20,7 +21,7 @@ const ChatsBar = () => {
         return phoneNumber.replace(/[+\-\s]/g, '');
     };
 
-    const { control, handleSubmit, watch } = useForm();
+    const { control } = useForm();
 
     const isPhoneSearch = /^[\d+]/.test(lastSearchValue);
     const sanitizedPhone = isPhoneSearch ? sanitizePhoneNumber(lastSearchValue) : '';
@@ -85,9 +86,16 @@ const ChatsBar = () => {
             dispatch(setAllChats(chats.data));
         }
     }, [chats]);
+    useFocusEffect(
+        useCallback(() => {
+            console.log('2334')
+            refetchChats()
+            return () => {
+            };
+        }, [])
+    );
 
     const displayData = searchValue.length === 0 ? chats?.data : searchResults;
-    console.log(displayData)
     return (
         <View className="flex-1 bg-dark-chatsBarColor">
             <View className="px-[16px] flex bg-dark-asideColor py-[12px]">
@@ -100,8 +108,8 @@ const ChatsBar = () => {
                                 {...field}
                                 placeholder="Search..."
                                 placeholderTextColor={'white'}
-                                value={searchValue}  
-                                onChangeText={(text) => setSearchValue(text)}  
+                                value={searchValue}
+                                onChangeText={(text) => setSearchValue(text)}
                                 className="flex-1 h-[46px] pl-[16px] text-dark-chatsBarTextColor rounded-l-[20px]"
                             />
                             <TouchableOpacity className="p-4 bg-dark-chatsBarItemColor)rounded-r-[20px]">
@@ -129,8 +137,8 @@ const ChatsBar = () => {
                             </Text>
                             <Text
                                 className={`ml-[8px] px-[7px] rounded-[30px] ${activeTab === tab
-                                        ? 'text-dark-chatsBarActiveButtonTextColor bg-dark-chatsBarActiveContainerMessageColor'
-                                        : 'text-dark-chatsBarButtonTextColor bg-dark-chatsBarContainerMessageColor'
+                                    ? 'text-dark-chatsBarActiveButtonTextColor bg-dark-chatsBarActiveContainerMessageColor'
+                                    : 'text-dark-chatsBarButtonTextColor bg-dark-chatsBarContainerMessageColor'
                                     }`}
                             >
                                 10

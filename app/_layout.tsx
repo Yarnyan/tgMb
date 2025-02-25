@@ -7,18 +7,19 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
-
 import StoreProvider from '@/helpers/StoreProvider';
-
-// import { useInitializeApp } from '@/hooks/useInitializeApp';
+import { useInitializeApp } from '@/hooks/useInitializeApp';
 
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
+function AppInitializer() {
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
+
+  const colorScheme = useColorScheme();
+
+  const { isLoading } = useInitializeApp(); 
 
   useEffect(() => {
     if (loaded) {
@@ -26,12 +27,12 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
-  if (!loaded) {
-    return null;
+  if (!loaded || isLoading) {
+    return null; 
   }
 
   return (
-    <StoreProvider>
+    <>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="profile" options={{ headerShown: false }} />
@@ -44,10 +45,21 @@ export default function RootLayout() {
           <Stack.Screen name="reg" options={{ headerShown: false }} />
           <Stack.Screen name="login" options={{ headerShown: false }} />
           <Stack.Screen name="chat" options={{ headerShown: false }} />
+          <Stack.Screen name="settings" options={{ headerShown: false }} />
+          <Stack.Screen name="editSettings" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>
-        <StatusBar style="auto" />
       </ThemeProvider>
+      <StatusBar style="auto" />
+    </>
+  );
+}
+
+export default function RootLayout() {
+
+  return (
+    <StoreProvider>
+      <AppInitializer /> {/* Wrap the initialization logic */}
     </StoreProvider>
   );
 }

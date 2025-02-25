@@ -4,7 +4,7 @@ import Chat from '@/modules/chat/Chat';
 
 const ChatPage = () => {
     return (
-        <View className='flex h-full'>
+        <View className='h-full'>
             <Chat />
         </View>
     );

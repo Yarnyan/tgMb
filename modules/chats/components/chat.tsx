@@ -20,12 +20,11 @@ const Chat = ({ chat, searchValue }: Props) => {
 
   const handlePress = async () => {
     dispatch(setActiveChat(chat));
-    await AsyncStorage.setItem('activeChat', JSON.stringify(chat));
     navigation.navigate('chat', { chatId: chat.id });
+    await AsyncStorage.setItem('activeChat', JSON.stringify(chat));
   };
 
   const displayName = searchValue && chat?.username ? chat?.username : chat?.chatName || chat?.username || '';
-  console.log(activeChat)
   return (
     <TouchableOpacity
       className={`flex flex-row justify-between items-center px-[16px] py-[12px]`}
