@@ -1,25 +1,27 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, Image, TouchableOpacity, Switch, ScrollView, TouchableWithoutFeedback } from 'react-native';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Link } from 'expo-router';
 import Svg, { Path } from 'react-native-svg';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { logOut, toggleHeader } from '@/store/reducers/headerSlice';
-import { useAppDispatch } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 const SideBar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const sidebarRef = useRef<View | null>(null);
     const dispatch = useAppDispatch();
-
+    const profile = useAppSelector((state) => state.profile.profile);
     return (
         <View className='absolute z-50 w-full h-full'>
             <View className='w-full h-full flex flex flex-row'>
                 <View ref={sidebarRef} className={`w-[380px] sm:h-[100dvh] fixed z-50 top-0 left-0 h-full transform transition-transform duration-300 w-64 bg-dark-activeTab shadow-lg z-20 px-[20px] py-[16px]`}>
                     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                         <View className='h-[102px] flex items-center bg-[var(--chatsBarButtonColor)] rounded-[20px] p-[16px]'>
-                            <Image source={require('../../assets/image/1.jpg')} className='w-[120px] h-[120px] rounded-full' />
+                            <Image source={profile.avatar ? { uri: 'http://192.168.0.5:5199/' + profile.avatar } : require('../../assets/image/user.png')} className='w-[120px] h-[120px] rounded-full' />
                             <View className='ml-[16px]'>
-                                <Text className='text-[16px] font-medium text-dark-callsBarCallNameColor'>Anna Forton</Text>
+                                <Text className='text-[16px] font-medium text-dark-callsBarCallNameColor text-center'>{profile?.username}</Text>
                                 <Text className='text-[12px] font-normal text-dark-callsBarCallDateColor'>UI & UX designer</Text>
                             </View>
                         </View>
@@ -85,8 +87,16 @@ const SideBar = () => {
                                 </Link>
                             </View>
                             <View className='h-[48px] flex'>
+                                <Link href='/new' className='flex flex-row' onPress={() => dispatch(toggleHeader())}>
+                                    <View className='flex flex-row'>
+                                        <MaterialIcons name="create" size={24} color="#AEAEAE" />
+                                        <Text className='text-[16px] font-medium text-dark-callsBarCallNameColor ml-[12px]'>Create</Text>
+                                    </View>
+                                </Link>
+                            </View>
+                            <View className='h-[48px] flex'>
                                 <Link href='/settings' className='flex flex-row' onPress={() => dispatch(toggleHeader())}>
-                                    <View className='flex flex-row'> 
+                                    <View className='flex flex-row'>
                                         <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                             <Path d="M3 9.10998V14.88C3 17 3 17 5 18.35L10.5 21.53C11.33 22.01 12.68 22.01 13.5 21.53L19 18.35C21 17 21 17 21 14.89V9.10998C21 6.99998 21 6.99999 19 5.64999L13.5 2.46999C12.68 1.98999 11.33 1.98999 10.5 2.46999L5 5.64999C3 6.99999 3 6.99998 3 9.10998Z" stroke="#AEAEAE" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                             <Path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="#AEAEAE" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -109,7 +119,7 @@ const SideBar = () => {
                         </View>
                         <View className="mt-[16px]">
                             <TouchableOpacity className='flex flex-row items-center justify-center rounded-[20px] bg-dark-createModalHoverColorButton w-full h-[48px]' onPress={() => dispatch(logOut())}>
-                                <FontAwesome6 name="add" size={24} color="#AEAEAE" />
+                                <MaterialCommunityIcons name="logout" size={24} color="#AEAEAE" />
                                 <Text className='text-[16px] font-medium text-dark-callsBarCallNameColor ml-[8px]'>Log out</Text>
                             </TouchableOpacity>
                         </View>

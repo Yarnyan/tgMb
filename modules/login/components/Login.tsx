@@ -16,10 +16,7 @@ export default function Login() {
         const body = { phone: sanitizedPhoneNumber };
 
         try {
-            console.log('4332');
             const res = await login(body);
-            console.log('API Response:', res);
-
             if (res.error) {
                 setErrorMessage(res.error.data?.message);
             } else {
@@ -28,8 +25,6 @@ export default function Login() {
                 await AsyncStorage.setItem("token", String(token));
                 await AsyncStorage.setItem("refreshToken", String(refreshToken));
                 await AsyncStorage.setItem("userId", String(userId));
-                await AsyncStorage.setItem("activeTab", "Chats");
-
                 router.push("/");
             }
         } catch (error) {

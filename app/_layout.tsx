@@ -3,12 +3,12 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
+import useProfileLoader from '@/hooks/useProfileLoader';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import StoreProvider from '@/helpers/StoreProvider';
-import { useInitializeApp } from '@/hooks/useInitializeApp';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -19,7 +19,7 @@ function AppInitializer() {
 
   const colorScheme = useColorScheme();
 
-  const { isLoading } = useInitializeApp(); 
+  const { isLoading, error } = useProfileLoader();
 
   useEffect(() => {
     if (loaded) {
@@ -27,7 +27,7 @@ function AppInitializer() {
     }
   }, [loaded]);
 
-  if (!loaded || isLoading) {
+  if (!loaded) {
     return null; 
   }
 
@@ -47,6 +47,8 @@ function AppInitializer() {
           <Stack.Screen name="chat" options={{ headerShown: false }} />
           <Stack.Screen name="settings" options={{ headerShown: false }} />
           <Stack.Screen name="editSettings" options={{ headerShown: false }} />
+          <Stack.Screen name="new" options={{ headerShown: false }} />
+          <Stack.Screen name="proxy" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>
       </ThemeProvider>
@@ -56,10 +58,9 @@ function AppInitializer() {
 }
 
 export default function RootLayout() {
-
   return (
     <StoreProvider>
-      <AppInitializer /> {/* Wrap the initialization logic */}
+      <AppInitializer /> 
     </StoreProvider>
   );
 }

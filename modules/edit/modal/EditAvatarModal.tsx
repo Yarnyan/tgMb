@@ -20,56 +20,75 @@ export default function EditAvatarModal({ onClose }: Props) {
     const [setAvatar] = useSetAvatarMutation();
     const { handleSubmit, setValue } = useForm<FormValues>();
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [base64String, setBase64String] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const dispatch = useAppDispatch();
     const { data: meData, refetch: refetchMe } = useGetMeQuery(null);
     useEffect(() => {
         if (profile.avatar) {
-            setSelectedImage('http://192.168.0.44:5199/' + `${profile.avatar}`);
+            setSelectedImage('http://192.168.0.5:5199/' + `${profile.avatar}`);
         }
     }, [profile.avatar]);
 
     const onSubmit = async (data: FormValues) => {
         try {
             if (!selectedImage) {
-                setErrorMessage('Please select an image first');
+                setErrorMessage('Пожалуйста, выберите изображение сначала');
                 return;
             }
-
+    
             const fileUri = selectedImage;
-            const fileInfo = await FileSystem.readAsStringAsync(fileUri, {
-                encoding: FileSystem.EncodingType.Base64,
-            });
-            console.log(fileInfo)
+            const fileInfo = await FileSystem.getInfoAsync(fileUri);
+    
+            // Создание объекта FormData
             const formData = new FormData();
-            formData.append('file', fileInfo);
+            formData.append('file', {
+                uri: fileUri,
+                name: fileInfo.uri.split('/').pop(), // Получение имени файла
+                type: 'image/jpeg', // или соответствующий MIME-тип
+            });
     
             const res = await setAvatar(formData);
-            console.log(res)
+            console.log(res);
             if (res.error && 'data' in res.error) {
-                setErrorMessage(res.error.data?.message || 'An error occurred');
+                setErrorMessage(res.error.data?.message || 'Произошла ошибка');
             } else {
+                console.log('22333')
                 refetchMe().then((res) => {
+                    console.log(res)
                     dispatch(setProfileInfo(res.data.data));
                 });
                 onClose();
             }
         } catch (error) {
-            console.error('Error updating avatar:', error);
+            console.error('Ошибка при обновлении аватара:', error);
         }
     };
 
     const handleSelectImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ['images', 'videos'],
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
         });
-        if (!result.canceled) {
-            setSelectedImage(result.assets[0].uri);
+    
+        if (!result.canceled && result.assets[0].uri) {
+            const selectedUri = result.assets[0].uri;
+
+            try {
+                const base64String = await FileSystem.readAsStringAsync(selectedUri, {
+                    encoding: FileSystem.EncodingType.Base64,
+                });
+                setSelectedImage(selectedUri);
+                setBase64String(base64String);
+            } catch (error) {
+                console.error("Error reading file:", error);
+                setErrorMessage("Failed to read the selected image.");
+            }
         }
     };
+    
 
     return (
         <View className="absolute top-[40%] -translate-y-[50%] w-[90%] max-w-[400px] bg-[#252525] rounded-[20px] overflow-hidden z-10">

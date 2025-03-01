@@ -10,6 +10,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo';
 import Svg, { Path } from 'react-native-svg';
 import { useAppSelector } from '@/hooks/redux';
+import { router } from 'expo-router';
 
 const Profile = () => {
     const navigation = useNavigation();
@@ -26,14 +27,13 @@ const Profile = () => {
         },
     ]
     const profile = useAppSelector((state) => state.profile.profile);
-    console.log(profile)
     return (
         <View className='h-full w-full'>
             <View className='bg-dark-activeTab w-full h-[100px] px-[16px] flex flex-col justify-between pb-[12px]'>
                 <View className='flex flex-row justify-between mt-[50px]'>
                     <View className='w-full flex flex-row items-center'>
                         <View>
-                            <TouchableOpacity onPress={() => navigation.goBack()}>
+                            <TouchableOpacity onPress={() => router.back()}>
                                 <Ionicons name="chevron-back" size={30} color="#AEAEAE" />
                             </TouchableOpacity>
                         </View>
@@ -47,7 +47,7 @@ const Profile = () => {
                 <View className='w-full h-full bg-dark-asideColor'>
                     <View className='flex flex-row items-center mt-[28px]'>
                         <View>
-                            <Image source={profile.avatar ? {url: profile.avatar} : require('../../assets/image/user.png')} className='w-[70px] h-[70px] rounded-full'></Image>
+                            <Image source={profile.avatar ? {uri: 'http://192.168.0.5:5199/' + profile.avatar} : require('../../assets/image/user.png')} className='w-[70px] h-[70px] rounded-full'></Image>
                         </View>
                         <View className='ml-[14px]'>
                             <Text className='text-[20px] font-medium text-dark-storiesBarMenuTextColor'>{profile.username}</Text>

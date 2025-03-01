@@ -3,7 +3,7 @@ import { baseQueryWithReauth } from '../base/base'
 
 export const groupApi = createApi({
     reducerPath: 'groupApi',
-    baseQuery: baseQueryWithReauth('http://192.168.0.44:5199/' + 'api'),
+    baseQuery: baseQueryWithReauth('http://192.168.0.5:5199/' + 'api'),
     endpoints: (builder) => ({
         addUserGroup: builder.mutation({
             query: (data) => ({

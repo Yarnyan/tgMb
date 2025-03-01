@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable, Image, Switch, ScrollView, TouchableOpacity, Modal, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
@@ -9,6 +9,9 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { useChangePhoneVisibleMutation, useChangeProfileVisibleMutation } from "../../../store/api/Privacy";
 import EditUsernameModal from '../modal/EditUsernameModal';
 import EditAvatarModal from '../modal/EditAvatarModal';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Link } from 'expo-router';
 
 type Props = {};
 
@@ -22,6 +25,17 @@ const EditSettings = ({ }: Props) => {
 
     const [openEditUsernameModal, setOpenEditUsernameModal] = useState(false);
     const [openEditPhotoModal, setOpenEditPhotoModal] = useState(false);
+    const [proxy, setProxy] = useState(false);
+
+    useEffect(() => {
+        const loadProxySetting = async () => {
+            const storedProxy = await AsyncStorage.getItem('proxy');
+            setProxy(storedProxy === 'true');
+        };
+
+        loadProxySetting();
+    }, []);
+
 
     const handleProfileVisibilityChange = (value: boolean) => {
         const formData = new FormData();
@@ -36,6 +50,11 @@ const EditSettings = ({ }: Props) => {
         changePhoneVisible(formData);
         dispatch(setPhoneVisible(value));
 
+    };
+
+    const handleProxyChange = (value: boolean) => {
+        AsyncStorage.setItem('proxy', String(value));
+        setProxy(value);
     };
 
     return (
@@ -55,11 +74,11 @@ const EditSettings = ({ }: Props) => {
                         </View>
                     </View>
                 </View>
-                <View className="p-4 w-full bg-[var(--activeTab)]">
+                <View className="p-4 w-full bg-dark-activeTab">
                     <View className="mt-4 flex flex-col items-center">
                         <Pressable onPress={() => setOpenEditPhotoModal(true)}>
                             <Image
-                                source={profile.avatar ? { url: profile.avatar } : require('../../../assets/image/user.png')}
+                                source={profile.avatar ? { uri: 'http://192.168.0.5:5199/' + profile.avatar } : require('../../../assets/image/user.png')}
                                 className="w-32 h-32 rounded-full"
                             />
                         </Pressable>
@@ -126,6 +145,15 @@ const EditSettings = ({ }: Props) => {
                             <Text className="ml-3 text-base font-medium text-dark-callsBarCallNameColor">Phone visibility</Text>
                         </View>
                         <Switch value={phoneVisible} onValueChange={handlePhoneVisibilityChange} />
+                    </View>
+                    <View className="w-full p-4 flex-row justify-between items-center h-[70px]">
+                        <Link className="" href={'/proxy'}>
+                            <View className='flex-row items-center'>
+                                <MaterialCommunityIcons name="approximately-equal" size={30} color="#AEAEAE" />
+                                <Text className="ml-3 text-base font-medium text-dark-callsBarCallNameColor">Proxy</Text>
+                            </View>
+                        </Link>
+                        <Switch value={proxy} onValueChange={handleProxyChange} />
                     </View>
                 </View>
             </View>

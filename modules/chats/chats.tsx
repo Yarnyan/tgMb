@@ -120,7 +120,7 @@ const ChatsBar = () => {
                 />
             </View>
 
-            <ScrollView horizontal={true} className="max-h-[90px]">
+            <ScrollView horizontal={true} className="max-h-[80px]" showsHorizontalScrollIndicator={false}>
                 <View className="flex-row gap-2 mt-[8px] pl-[16px] pb-4 h-[60px]">
                     {['All', 'Channels', 'Groups', 'Secrets'].map((tab) => (
                         <TouchableOpacity

@@ -31,7 +31,7 @@ const Settings = ({ }: Props) => {
                 <View className="p-4 w-full flex flex-col bg-dark-activeTab pt-10">
                     <View className="mt-4 flex flex-col items-center">
                         <Image
-                            source={profile.avatar ? { url: profile.avatar } : require('../../assets/image/user.png')}
+                            source={profile.avatar ? { uri: 'http://192.168.0.5:5199/' + profile.avatar } : require('../../assets/image/user.png')}
                             className="w-32 h-32 rounded-full"
                         />
                         <Text className="text-2xl font-semibold text-dark-callsBarCallNameColor mt-4">

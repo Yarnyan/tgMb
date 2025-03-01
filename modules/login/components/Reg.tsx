@@ -16,10 +16,7 @@ export default function Reg() {
         const body = { phone: sanitizedPhoneNumber, username: data.username };
 
         try {
-            console.log('4332');
             const res = await reg(body);
-            console.log('API Response:', res);
-
             if (res.error) {
                 setErrorMessage(res.error.data?.message);
             } else {

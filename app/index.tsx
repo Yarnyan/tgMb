@@ -17,14 +17,14 @@ const ChatsPage = () => {
             Animated.spring(sideBarAnimation, {
                 toValue: 0,
                 useNativeDriver: true,
-                speed: 5,
+                speed: 3,
                 bounciness: 5
             }).start();
         } else {
             Animated.spring(sideBarAnimation, {
                 toValue: -300,
                 useNativeDriver: true,
-                speed: 5,
+                speed: 3,
                 bounciness: 5
             }).start();
         }

@@ -16,12 +16,6 @@ export default function ChatFooter({ setMessages }: Props) {
   const [sendMessage] = useSendMessageMutation();
   const [sendMessageChat] = useSendMessageChatMutation();
   const activeChat = useAppSelector((state) => state.chat.activeChat);
-
-  const handleFileButtonClick = () => {
-    // Реализация выбора файла через react-native-image-picker или аналогичную библиотеку
-    console.log('File picker not implemented yet');
-  };
-
   const onSubmit = async (data: any) => {
     if (activeChat && activeChat.messages) {
       await sendMessageChat({

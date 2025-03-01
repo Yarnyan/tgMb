@@ -13,7 +13,7 @@ export default function TextMessage({ message }: Props) {
     <View className="flex flex-row items-end my-4 max-w-[200px] w-full " style={{}}>
       <View>
         <Image
-          source={message?.fromUser?.avatar ? { uri: message?.fromUser?.avatar } : require('../../../assets/image/user.png')}
+          source={message?.fromUser?.avatar ? { uri: 'http://192.168.0.5:5199/' + message?.fromUser?.avatar } : require('../../../assets/image/user.png')}
           className="w-10 h-10 rounded-full"
         />
       </View>

@@ -72,7 +72,7 @@ export default function ChatHeader({ }: Props) {
                     </View>
                     <View>
                         <Image
-                            source={activeChat?.avatar ? { uri: activeChat.avatar } : activeChat && require('../../../assets/image/user.png')}
+                            source={activeChat?.avatar ? { uri: 'http://192.168.0.5:5199/' + activeChat.avatar } : activeChat && require('../../../assets/image/user.png')}
                             resizeMode="cover"
                             style={{
                                 width: 40,

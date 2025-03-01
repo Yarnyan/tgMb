@@ -8,7 +8,6 @@ import { useGetMessageQuery, useGetMessageWithUserQuery } from '../../store/api/
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useGetChatsQuery } from '../../store/api/Chat';
-import { useFocusEffect } from 'expo-router';
 
 type Props = {
 
@@ -60,7 +59,7 @@ export default function Chat({  }: Props) {
     let isCancelled = false;
 
     const connection = new HubConnectionBuilder()
-      .withUrl(`http://192.168.0.44:5199/ws/messages`, {
+      .withUrl(`http://192.168.0.5:5199/ws/messages`, {
         accessTokenFactory: () => Promise.resolve(token || ''),
         headers: {
           'access-control-allow-origin': '*',
