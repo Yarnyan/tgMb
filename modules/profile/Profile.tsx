@@ -47,7 +47,7 @@ const Profile = () => {
                 <View className='w-full h-full bg-dark-asideColor'>
                     <View className='flex flex-row items-center mt-[28px]'>
                         <View>
-                            <Image source={profile.avatar ? {uri: 'http://192.168.0.5:5199/' + profile.avatar} : require('../../assets/image/user.png')} className='w-[70px] h-[70px] rounded-full'></Image>
+                            <Image source={profile.avatar ? {uri: 'http://192.168.0.44:5199/' + profile.avatar} : require('../../assets/image/user.png')} className='w-[70px] h-[70px] rounded-full'></Image>
                         </View>
                         <View className='ml-[14px]'>
                             <Text className='text-[20px] font-medium text-dark-storiesBarMenuTextColor'>{profile.username}</Text>

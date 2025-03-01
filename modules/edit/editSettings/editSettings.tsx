@@ -78,7 +78,7 @@ const EditSettings = ({ }: Props) => {
                     <View className="mt-4 flex flex-col items-center">
                         <Pressable onPress={() => setOpenEditPhotoModal(true)}>
                             <Image
-                                source={profile.avatar ? { uri: 'http://192.168.0.5:5199/' + profile.avatar } : require('../../../assets/image/user.png')}
+                                source={profile.avatar ? { uri: 'http://192.168.0.44:5199/' + profile.avatar } : require('../../../assets/image/user.png')}
                                 className="w-32 h-32 rounded-full"
                             />
                         </Pressable>

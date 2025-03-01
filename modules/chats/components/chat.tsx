@@ -35,7 +35,7 @@ const Chat = ({ chat, searchValue }: Props) => {
     >
       <View className="flex flex-row items-center w-full">
         <Image
-          source={chat?.avatar ? { uri: 'http://192.168.0.5:5199/' + chat.avatar } : chat && require('../../../assets/image/user.png')}
+          source={chat?.avatar ? { uri: 'http://192.168.0.44:5199/' + chat.avatar } : chat && require('../../../assets/image/user.png')}
           className="rounded-full w-[50px] h-[50px]"
         />
         <View className="ml-[14px] flex flex-col w-full justify-between">

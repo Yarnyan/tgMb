@@ -3,7 +3,7 @@ import { baseQueryWithReauth } from '../base/base'
 
 export const privacyApi = createApi({
   reducerPath: 'privacyApi',
-  baseQuery: baseQueryWithReauth('http://192.168.0.5:5199/' + 'api'),
+  baseQuery: baseQueryWithReauth('http://192.168.0.44:5199/' + 'api'),
   endpoints: (builder) => ({
     changeProfileVisible: builder.mutation({
       query: (data) => ({

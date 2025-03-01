@@ -19,7 +19,7 @@ const SideBar = () => {
                 <View ref={sidebarRef} className={`w-[380px] sm:h-[100dvh] fixed z-50 top-0 left-0 h-full transform transition-transform duration-300 w-64 bg-dark-activeTab shadow-lg z-20 px-[20px] py-[16px]`}>
                     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                         <View className='h-[102px] flex items-center bg-[var(--chatsBarButtonColor)] rounded-[20px] p-[16px]'>
-                            <Image source={profile.avatar ? { uri: 'http://192.168.0.5:5199/' + profile.avatar } : require('../../assets/image/user.png')} className='w-[120px] h-[120px] rounded-full' />
+                            <Image source={profile.avatar ? { uri: 'http://192.168.0.44:5199/' + profile.avatar } : require('../../assets/image/user.png')} className='w-[120px] h-[120px] rounded-full' />
                             <View className='ml-[16px]'>
                                 <Text className='text-[16px] font-medium text-dark-callsBarCallNameColor text-center'>{profile?.username}</Text>
                                 <Text className='text-[12px] font-normal text-dark-callsBarCallDateColor'>UI & UX designer</Text>

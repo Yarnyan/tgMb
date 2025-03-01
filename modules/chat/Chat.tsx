@@ -59,7 +59,7 @@ export default function Chat({  }: Props) {
     let isCancelled = false;
 
     const connection = new HubConnectionBuilder()
-      .withUrl(`http://192.168.0.5:5199/ws/messages`, {
+      .withUrl(`http://192.168.0.44:5199/ws/messages`, {
         accessTokenFactory: () => Promise.resolve(token || ''),
         headers: {
           'access-control-allow-origin': '*',

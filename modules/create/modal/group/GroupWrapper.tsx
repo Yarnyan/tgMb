@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Modal, TouchableOpacity } from 'react-native';
 import { useAppSelector } from '../../../../hooks/redux';
 import CreateGroupModal from './CreateGroupModal';
+import AddContactsModal from './AddContactsModal';
 
 type Props = {
     onClose: () => void;
@@ -15,7 +16,7 @@ const GroupWrapper = ({ onClose }: Props) => {
             case 1:
                 return <CreateGroupModal onClose={onClose} />;
             case 2:
-                // return <AddContactsModal onClose={onClose} />;
+                return <AddContactsModal onClose={onClose} />;
             default:
                 return null;
         }

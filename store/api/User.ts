@@ -3,7 +3,7 @@ import { baseQueryWithReauth } from '../base/base'
 
 export const userApi = createApi({
     reducerPath: 'userApi',
-    baseQuery: baseQueryWithReauth('http://192.168.0.5:5199/' + 'api'),
+    baseQuery: baseQueryWithReauth('http://192.168.0.44:5199/' + 'api'),
     tagTypes: ['updateProfile'],
     endpoints: (builder) => ({
         getUserByUsername: builder.query({

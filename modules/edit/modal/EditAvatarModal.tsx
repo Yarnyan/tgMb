@@ -26,7 +26,7 @@ export default function EditAvatarModal({ onClose }: Props) {
     const { data: meData, refetch: refetchMe } = useGetMeQuery(null);
     useEffect(() => {
         if (profile.avatar) {
-            setSelectedImage('http://192.168.0.5:5199/' + `${profile.avatar}`);
+            setSelectedImage('http://192.168.0.44:5199/' + `${profile.avatar}`);
         }
     }, [profile.avatar]);
 

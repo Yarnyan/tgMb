@@ -3,7 +3,7 @@ import { baseQueryWithReauth } from '../base/base';
 
 export const authApi = createApi({
   reducerPath: 'authApi',
-  baseQuery: baseQueryWithReauth('http://192.168.0.5:5199/' + 'api'),
+  baseQuery: baseQueryWithReauth('http://192.168.0.44:5199/' + 'api'),
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (data) => ({
