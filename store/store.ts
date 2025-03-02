@@ -10,6 +10,8 @@ import { authApi } from "./api/Auth";
 import { chatApi } from './api/Chat';
 import { userApi } from './api/User';
 import { groupApi } from './api/Group';
+import { channelApi } from './api/Channel';
+
 const rootReducer = combineReducers({
     step: stepsReducer,
     chat: chatReducer,
@@ -22,13 +24,14 @@ const rootReducer = combineReducers({
     [privacyApi.reducerPath]: privacyApi.reducer,
     [userApi.reducerPath]: userApi.reducer,  
     [groupApi.reducerPath]: groupApi.reducer, 
+    [channelApi.reducerPath]: channelApi.reducer,
 })
 
 export const makeStore = () => {
     return configureStore({
         reducer: rootReducer,
         middleware: (getDefaultMiddleware) => {
-            return getDefaultMiddleware().concat(authApi.middleware, chatApi.middleware, privacyApi.middleware, userApi.middleware, groupApi.middleware);
+            return getDefaultMiddleware().concat(authApi.middleware, chatApi.middleware, privacyApi.middleware, userApi.middleware, groupApi.middleware, channelApi.middleware);
         }, 
     })
 }
@@ -38,3 +41,5 @@ export type AppStore = ReturnType<typeof makeStore>
 
 export type RootState = ReturnType<AppStore['getState']>
 export type AppDispatch = AppStore['dispatch']
+
+console.log('channelApi:', channelApi.middleware);

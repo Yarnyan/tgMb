@@ -23,8 +23,12 @@ const stepsSlice = createSlice({
     prevStepChannel: (state) => {
       if (state.currentStepChannel > 1) state.currentStepChannel -= 1;
     },
+    clearSteps: (state) => {
+      state.currentStep = 1;
+      state.currentStepChannel = 1;
+    }
   },
 });
 
-export const { nextStep, prevStep, goToStep, nextStepChannel, prevStepChannel } = stepsSlice.actions;
+export const { nextStep, prevStep, goToStep, nextStepChannel, prevStepChannel, clearSteps } = stepsSlice.actions;
 export default stepsSlice.reducer;

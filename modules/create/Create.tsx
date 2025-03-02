@@ -4,14 +4,19 @@ import { Svg, Path } from 'react-native-svg';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import GroupWrapper from './modal/group/GroupWrapper';
+import ChannelWrapper from './modal/Channel/ChannelWrapper';
+import { clearSteps } from '@/store/reducers/stepsSlice';
+import { useAppDispatch } from '@/hooks/redux';
+
 type Props = {
 };
 
 export default function CreateBar({ }: Props) {
 
     const [activeTab, setActiveTab] = useState<'Team' | 'Channels' | 'Groups' | null>(null);
-
+    const dispatch = useAppDispatch();
     const [groupModalVisible, setGroupModalVisible] = useState<boolean>(false);
+    const [channelModalVisible, setChannelModalVisible] = useState<boolean>(false);
 
     return (
         <View className="h-full bg-dark-chatsBarColor">
@@ -31,7 +36,7 @@ export default function CreateBar({ }: Props) {
             </View>
             <View className="w-full h-full">
                 <View className="flex flex-col w-full">
-                    <TouchableOpacity onPress={() => {setGroupModalVisible(true)}} className={`px-4 cursor-pointer h-[48px] flex items-center flex-row ${activeTab === "Groups" ? 'bg-dark-callsCalendarActiveDayColor' : ''}`}>
+                    <TouchableOpacity onPress={() => { setGroupModalVisible(true) }} className={`px-4 cursor-pointer h-[48px] flex items-center flex-row ${activeTab === "Groups" ? 'bg-dark-callsCalendarActiveDayColor' : ''}`}>
                         <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                             <Path d="M9.75845 10.87C9.65845 10.86 9.53845 10.86 9.42845 10.87C7.04845 10.79 5.15845 8.84 5.15845 6.44C5.15845 3.99 7.13845 2 9.59845 2C12.0484 2 14.0384 3.99 14.0384 6.44C14.0284 8.84 12.1384 10.79 9.75845 10.87Z" stroke="#AEAEAE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                             <Path d="M4.75836 14.56C2.33836 16.18 2.33836 18.82 4.75836 20.43C7.50836 22.27 12.0184 22.27 14.7684 20.43C17.1884 18.81 17.1884 16.17 14.7684 14.56C12.0284 12.73 7.51836 12.73 4.75836 14.56Z" stroke="#AEAEAE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -41,7 +46,7 @@ export default function CreateBar({ }: Props) {
 
                         <Text className="text-dark-storiesBarMenuTextColor text-[14px] font-medium ml-4">New group</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { }} className={`px-4 cursor-pointer h-[48px] flex items-center flex-row ${activeTab === "Channels" ? 'bg-dark-callsCalendarActiveDayColor' : ''}`}>
+                    <TouchableOpacity onPress={() => { setChannelModalVisible(true) }} className={`px-4 cursor-pointer h-[48px] flex items-center flex-row ${activeTab === "Channels" ? 'bg-dark-callsCalendarActiveDayColor' : ''}`}>
                         <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                             <Path d="M6 9.85999V14.15" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                             <Path d="M9 8.42999V15.57" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -63,9 +68,31 @@ export default function CreateBar({ }: Props) {
             </View>
             {
                 groupModalVisible &&
-                <Modal transparent={true}>
+                <Modal transparent={true}
+                    animationType="slide"
+                    onRequestClose={() => {
+                        console.log("Групповое модальное окно закрыто");
+                        setGroupModalVisible(false);
+                        dispatch(clearSteps())
+                    }}
+                >
                     <View style={styles.modalBackground}>
                         <GroupWrapper onClose={() => setGroupModalVisible(false)} />
+                    </View>
+                </Modal>
+            }
+            {
+                channelModalVisible &&
+                <Modal transparent={true}
+                    animationType="slide"
+                    onRequestClose={() => {
+                        console.log("Модальное окно канала закрыто");
+                        setChannelModalVisible(false);
+                        dispatch(clearSteps())
+                    }}
+                >
+                    <View style={styles.modalBackground}>
+                        <ChannelWrapper onClose={() => setChannelModalVisible(false)} />
                     </View>
                 </Modal>
             }

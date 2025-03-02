@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
 import { nextStep, prevStep } from '../../../../store/reducers/stepsSlice';
 import Contact from '../../components/Contanct';
 import { useAddUserGroupMutation } from '../../../../store/api/Group';
-
+import { clearSteps } from '../../../../store/reducers/stepsSlice';
 type Props = {
   onClose: () => void;
 };
@@ -33,6 +33,7 @@ const AddContactsModal = ({ onClose }: Props) => {
       if (result.error) {
         console.log(result.error);
       } else {
+        dispatch(clearSteps());
         onClose();
       }
     }
