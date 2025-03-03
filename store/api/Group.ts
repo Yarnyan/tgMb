@@ -3,7 +3,7 @@ import { baseQueryWithReauth } from '../base/base'
 
 export const groupApi = createApi({
     reducerPath: 'groupApi',
-    baseQuery: baseQueryWithReauth('http://192.168.0.44:5199/' + 'api'),
+    baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
         addUserGroup: builder.mutation({
             query: (data) => ({
@@ -19,7 +19,28 @@ export const groupApi = createApi({
                 body: data
             }),
         }),
+        createChannel: builder.mutation({
+            query: (data) => ({
+                url: 'Channel/createChannel',
+                method: 'POST',
+                body: data
+            }),
+        }),
+        subcChannel: builder.mutation({
+            query: (data) => ({
+                url: 'Channel/subscribe',
+                method: 'POST',
+                body: data
+            }),
+        }),
+        unsubcChannel: builder.mutation({
+            query: (data) => ({
+                url: 'Channel/unsubscribe',
+                method: 'POST',
+                body: data
+            }),
+        }),
     }),
 })
 
-export const { useAddUserGroupMutation, useCreateGroupMutation } = groupApi
+export const { useAddUserGroupMutation, useCreateGroupMutation, useCreateChannelMutation, useUnsubcChannelMutation, useSubcChannelMutation} = groupApi

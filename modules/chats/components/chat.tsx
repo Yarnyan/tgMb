@@ -17,13 +17,15 @@ const Chat = ({ chat, searchValue }: Props) => {
   const navigation = useNavigation();
 
   const activeChat = useAppSelector((state) => state.chat.activeChat);
-
+  const phoneUser = useAppSelector((state) => state.chat.searchUserForPhone)
   const handlePress = async () => {
     dispatch(setActiveChat(chat));
     navigation.navigate('chat', { chatId: chat.id });
     await AsyncStorage.setItem('activeChat', JSON.stringify(chat));
   };
-  const displayName = searchValue && chat?.username ? chat?.username : chat?.chatName || chat?.username || '';
+  const displayName = searchValue && phoneUser ? phoneUser
+    : chat?.chatName || chat?.username || chat?.channel?.name || chat?.name || '';
+    
   return (
     <TouchableOpacity
       className={`flex flex-row justify-between items-center px-[16px] py-[12px]`}

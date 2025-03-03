@@ -3,7 +3,7 @@ import { baseQueryWithReauth } from '../base/base'
 
 export const chatApi = createApi({
   reducerPath: 'chatApi',
-  baseQuery: baseQueryWithReauth('http://192.168.0.44:5199/' + 'api'),
+  baseQuery: baseQueryWithReauth,
   tagTypes: ['messages'],
   endpoints: (builder) => ({
     getMessage: builder.query({
@@ -19,6 +19,18 @@ export const chatApi = createApi({
         method: 'GET',
       }),
       providesTags: ['messages'],
+    }),
+    getChannelByName: builder.query({
+      query: (name) => ({
+        url: `Chat/search?name=${name}`,
+        method: 'GET',
+      }),
+    }),
+    getBotsByName: builder.query({
+      query: (name) => ({
+        url: `Chat/searchBot?name=${name}`,
+        method: 'GET',
+      }),
     }),
     sendMessage: builder.mutation({
       query: (data) => ({
@@ -42,7 +54,14 @@ export const chatApi = createApi({
       }),
       providesTags: ['messages']
     }),
+    sendMessageBot: builder.mutation({
+      query: (data) => ({
+        url: 'Chat/sendMessageBot',
+        method: 'POST',
+        body: data
+      }),
+    }),
   }),
 })
 
-export const { useSendMessageMutation, useGetMessageQuery, useGetChatsQuery, useSendMessageChatMutation, useGetMessageWithUserQuery } = chatApi
+export const { useSendMessageMutation, useGetMessageQuery, useGetChatsQuery, useSendMessageChatMutation, useGetMessageWithUserQuery, useSendMessageBotMutation, useGetChannelByNameQuery, useGetBotsByNameQuery} = chatApi

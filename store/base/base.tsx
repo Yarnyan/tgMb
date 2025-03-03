@@ -1,53 +1,59 @@
-import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { router } from 'expo-router';
-const customBaseQuery = (baseUrl: string) => fetchBaseQuery({
-  baseUrl,
-  prepareHeaders: async (headers) => {
-    const token = await AsyncStorage.getItem('token');
-    if (token) {
-      headers.set('authorization', `Bearer ${token}`);
-    }
-    headers.set("ngrok-skip-browser-warning", "*");
-    headers.set('Accept', '*/*');
 
-    return headers;
-  },
-});
+const setupAxiosInstance = async () => {
+  const proxyEnabled = await AsyncStorage.getItem('proxy');
+  const proxyAddress = await AsyncStorage.getItem('proxyAddress');
+  const proxyAuthEnabled = await AsyncStorage.getItem('proxyAuth');
+  const proxyUsername = await AsyncStorage.getItem('proxyUsername'); 
+  const proxyPassword = await AsyncStorage.getItem('proxyPassword');
 
-export const baseQueryWithReauth = (baseUrl: string) => async (args: any, api: any, extraOptions: any) => {
-  let result = await customBaseQuery(baseUrl)(args, api, extraOptions);
+  const axiosInstance = axios.create({
+    baseURL: 'http://192.168.0.44:5199/api',
+  });
 
-  if (result.error && result.error.status === 401) {
-    const userId = await AsyncStorage.getItem('userId');
-    const accessToken = await AsyncStorage.getItem('token');
-    const refreshToken = await AsyncStorage.getItem('refreshToken');
+  if (proxyEnabled === 'true' && proxyAddress) {
+    const urlWithoutProtocol = proxyAddress.replace(/^https?:\/\//, '');
+    const [host, port] = urlWithoutProtocol.split(':');
 
-    const body = {
-      userId: userId ? parseInt(userId, 10) : 0,
-      accessToken: accessToken || '',
-      refreshToken: refreshToken || '',
+    axiosInstance.defaults.proxy = {
+      host,
+      port: parseInt(port, 10),
     };
 
-    const refreshResult = await customBaseQuery(baseUrl)({
-      url: 'auth/refresh-token',
-      method: 'POST',
-      body,
-    }, api, extraOptions);
-
-    if (refreshResult.data) {
-      const newToken = refreshResult.data.accessToken;
-      const newRefreshToken = refreshResult.data.refreshToken;
-
-      await AsyncStorage.setItem('token', newToken);
-      await AsyncStorage.setItem('refreshToken', newRefreshToken);
-
-      result = await customBaseQuery(baseUrl)(args, api, extraOptions);
-    } else {
-      await AsyncStorage.clear();
-      router.push('/login');
+    if (proxyAuthEnabled === 'true' && proxyUsername && proxyPassword) {
+      axiosInstance.defaults.proxy.auth = {
+        username: proxyUsername,
+        password: proxyPassword,
+      };
     }
+
+  } else {
+    console.log('Proxy is not enabled.');
   }
 
-  return result;
+  console.log(axiosInstance.defaults);
+  return axiosInstance;
+};
+
+export const baseQueryWithReauth = async ({ url, method = 'GET', body, headers }: any) => {
+  try {
+    const axiosInstance = await setupAxiosInstance();
+
+    const token = await AsyncStorage.getItem('token');
+    if (token) {
+      headers = { ...headers, Authorization: `Bearer ${token}` };
+    }
+
+    const response = await axiosInstance({
+      url,
+      method,
+      data: body,
+      headers,
+    });
+
+    return { data: response.data };
+  } catch (error) {
+    return { error: { status: error.response?.status, data: error.message } };
+  }
 };

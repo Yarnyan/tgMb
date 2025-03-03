@@ -1,5 +1,6 @@
 package com.yarnyan.tgnative
-
+import com.yarnyan.tgnative.R 
+import com.yarnyan.tgnative.BuildConfig
 import android.os.Build
 import android.os.Bundle
 

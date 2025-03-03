@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
 import { useForm, Controller, FormProvider } from 'react-hook-form';
 import * as ImagePicker from 'expo-image-picker';
 import { useAppDispatch } from '../../../../hooks/redux';
-import { useCreateChannelMutation } from '@/store/api/Channel';
+import { useCreateChannelMutation } from '@/store/api/Group';
 
 type Props = {
     onClose: () => void;
@@ -32,8 +32,13 @@ const CreateChannelModal = ({ onClose }: Props) => {
             const formData = new FormData();
             formData.append("Name", data.name);
             if (uploading) {
-                formData.append("file", uploading);
+                formData.append("file", {
+                    uri: uploading.uri,
+                    name: uploading.uri.split('/').pop(),
+                    type: 'image/jpeg',
+                });
             }
+            console.log(formData)
             const res = await createChannel(formData)
             console.log(res)
             if (res.error && 'data' in res.error) {
@@ -48,7 +53,7 @@ const CreateChannelModal = ({ onClose }: Props) => {
 
     const handleImagePick = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            mediaTypes: ['images'],
             allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
@@ -59,6 +64,7 @@ const CreateChannelModal = ({ onClose }: Props) => {
             setUploading(selectedAsset);
         }
     };
+
 
     return (
         <FormProvider {...methods}>

@@ -5,6 +5,7 @@ import { useAppDispatch } from '../../hooks/redux';
 import { setAllChats, setSearchUserForPhone } from '../../store/reducers/chatSlice';
 import { useGetChatsQuery } from '../../store/api/Chat';
 import { useGetUserByPhoneQuery, useGetUserByUsernameQuery } from '../../store/api/User';
+import { useGetChannelByNameQuery, useGetBotsByNameQuery } from '../../store/api/Chat';
 import Loader from '../../components/ui/Loader';
 import Chat from './components/chat';
 import { useFocusEffect } from 'expo-router';
@@ -36,6 +37,16 @@ const ChatsBar = () => {
         { skip: isPhoneSearch || lastSearchValue.trim() === '' }
     );
 
+    const { refetch: refetchBotsByName } = useGetBotsByNameQuery(
+        lastSearchValue,
+        { skip: isPhoneSearch || lastSearchValue.trim() === '' }
+    );
+
+    const { refetch: refetchChannelByName } = useGetChannelByNameQuery(
+        lastSearchValue,
+        { skip: isPhoneSearch || lastSearchValue.trim() === '' }
+    );
+
     const { data: chats, refetch: refetchChats } = useGetChatsQuery(null);
 
     useEffect(() => {
@@ -57,27 +68,67 @@ const ChatsBar = () => {
     }, [searchValue]);
 
     useEffect(() => {
-        if (!lastSearchValue.trim() || lastSearchValue.trim().length === 0) {
+        if (!lastSearchValue.trim()) {
             setSearchResults(null);
             return;
         }
-        setIsLoading(true);
-        if (isPhoneSearch) {
-            dispatch(setSearchUserForPhone(sanitizedPhone));
-            refetchUserByPhone()
-                .then((res) => {
-                    setSearchResults(res.data.data);
-                })
-                .catch(() => setSearchResults(null))
-                .finally(() => setIsLoading(false));
-        } else {
-            refetchUserByUsername()
-                .then((res) => {
-                    setSearchResults(res.data.data);
-                })
-                .catch(() => setSearchResults(null))
-                .finally(() => setIsLoading(false));
+
+        const handleSearch = async () => {
+            setIsLoading(true);
+
+            try {
+                const isPhoneSearch = /^[\d+]/.test(lastSearchValue);
+
+                if (isPhoneSearch) {
+                    const sanitizedPhone = sanitizePhoneNumber(lastSearchValue);
+                    dispatch(setSearchUserForPhone(sanitizedPhone));
+
+                    const response = await refetchUserByPhone();
+                    handleResponsePhone(response);
+                } else {
+
+                    const [userResponse, channelResponse, botsResponse] = await Promise.all([
+                        refetchUserByUsername(),
+                        refetchChannelByName(),
+                        refetchBotsByName()
+                    ]);
+                    handleResponse(userResponse);
+                    handleResponse(channelResponse);
+                    handleResponse(botsResponse);
+                }
+            } catch (error) {
+                console.error('Ошибка при поиске:', error);
+                setSearchResults(null);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        const handleResponse = (response: any) => {
+            if (response.data && response.data.data && response.data.data.length > 0) {
+                setSearchResults((prevResults: any) => {
+                    if (prevResults) {
+                        return [...prevResults, ...response.data.data];
+                    } else {
+                        return response.data.data;
+                    }
+                });
+            }
+        };
+
+        const handleResponsePhone = (response: any) => {
+            if (response.data && response.data.data) {
+                setSearchResults((prevResults: any) => {
+                    if (prevResults) {
+                        return [...prevResults, ...response.data.data];
+                    } else {
+                        return response.data.data;
+                    }
+                });
+            }
         }
+
+        handleSearch();
     }, [lastSearchValue]);
 
     useEffect(() => {
@@ -88,10 +139,7 @@ const ChatsBar = () => {
     }, [chats]);
     useFocusEffect(
         useCallback(() => {
-            console.log('2334')
             refetchChats()
-            return () => {
-            };
         }, [])
     );
 
@@ -120,8 +168,8 @@ const ChatsBar = () => {
                 />
             </View>
 
-            <ScrollView horizontal={true} className="max-h-[80px]" showsHorizontalScrollIndicator={false}>
-                <View className="flex-row gap-2 mt-[8px] pl-[16px] pb-4 h-[60px]">
+            <ScrollView horizontal={true} className="max-h-[100px]" showsHorizontalScrollIndicator={false}>
+                <View className="flex-row gap-2 mt-[8px] pl-[16px] pb-4 h-[100px]">
                     {['All', 'Channels', 'Groups', 'Secrets'].map((tab) => (
                         <TouchableOpacity
                             key={tab}
@@ -150,11 +198,13 @@ const ChatsBar = () => {
 
             <ScrollView>
                 {!isLoading && displayData && displayData.length === 0 ? (
-                    <Text className="text-center text-gray-500">Нет чатов</Text>
+                    <p className="text-center text-gray-500">Нет результатов</p>
                 ) : (
-                    Array.isArray(displayData)
-                        ? displayData.map((result: any) => <Chat key={result.id} chat={result} />)
-                        : displayData && <Chat key={displayData?.id} chat={displayData} searchValue={searchValue} />
+                    Array.isArray(displayData) ? (
+                        displayData.map((result: any) => <Chat key={result.id} chat={result} />)
+                    ) : (
+                        <Chat key={displayData?.id} chat={displayData} searchValue={searchValue} />
+                    )
                 )}
             </ScrollView>
 

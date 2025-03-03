@@ -64,7 +64,7 @@ export default function ChatHeader({ }: Props) {
                     </TouchableOpacity>
                     <View className="flex items-center flex-col">
                         <Text className='text-base font-medium text-dark-storiesBarMenuTextColor'>
-                            {activeChat?.chatName || activeChat?.username}
+                            {activeChat?.chatName || activeChat?.username || activeChat?.channel?.name}
                         </Text>
                         <Text className='text-[12px] font-normal text-dark-callsCalendarCallTextColor'> {activeChat?.lastMessageTime
                             ? formatLastSeen(activeChat.lastMessageTime)

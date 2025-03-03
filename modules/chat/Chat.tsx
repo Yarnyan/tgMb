@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback} from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { View, ScrollView, StyleSheet, Pressable } from 'react-native';
 import ChatHeader from './components/ChatHeader';
 import ChatFooter from './components/ChatFooter';
@@ -8,15 +8,17 @@ import { useGetMessageQuery, useGetMessageWithUserQuery } from '../../store/api/
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useGetChatsQuery } from '../../store/api/Chat';
+import ChatFooterSub from './components/ChatFooterSub';
 
 type Props = {
 
 };
 
-export default function Chat({  }: Props) {
-  const activeMoreTab = useAppSelector((state) => state.chat.activeMoreTab);
+export default function Chat({ }: Props) {
+  const profile = useAppSelector((state) => state.profile.profile);
   const activeChat = useAppSelector((state) => state.chat.activeChat);
   const chats = useAppSelector((state) => state.chat.allChats);
+
   const connectionRef = useRef<HubConnection | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const messagesEndRef = useRef<any>(null);
@@ -108,6 +110,10 @@ export default function Chat({  }: Props) {
     }
   }, [messages]);
 
+  const isOwner = activeChat?.chatType === 3 && activeChat?.channel?.ownerId === profile?.id;
+  const isNotOwner = activeChat?.chatType === 3 && activeChat?.channel?.ownerId !== profile?.id;
+  const chatExistsInChatsData = chatsData?.data?.some((chat: any) => chat.id === activeChat?.id);
+
   return (
     <View className="h-full flex">
       <View className="flex-1">
@@ -125,7 +131,11 @@ export default function Chat({  }: Props) {
               <TextMessage key={item.id} message={item} />
             ))}
         </ScrollView>
-        <ChatFooter setMessages={setMessages} />
+        {(isNotOwner && !chatExistsInChatsData) ? (
+          <ChatFooterSub />
+        ) : (!isNotOwner) ? (
+          <ChatFooter setMessages={setMessages} />
+        ) : ''}
       </View>
     </View>
   );
